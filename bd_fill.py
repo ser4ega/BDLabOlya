@@ -27,24 +27,33 @@ Prog_names=[
 'Word', 'Excel', 'Explorer', 'Google' 
 ] 
 
-c.execute("""SELECT *
-FROM USER
-ORDER BY id DESC
-LIMIT 1""")
-result =c.fetchall()
-if (len(result)>0):
-    start_id=result[0][0]+1
-else:
-    start_id=0
-for i in range(start_id,start_id+10): 
-    id = i 
-    c.execute('INSERT INTO USER (Id, Name, Hash) VALUES (?, ?, ?)', 
+# c.execute("""SELECT *
+# FROM USER
+# ORDER BY id DESC
+# LIMIT 1""")
+# result =c.fetchall()
+# if (len(result)>0):
+#     start_id=result[0][0]+1
+# else:
+#     start_id=0
+# for i in range(start_id,start_id+10): 
+#     id = i 
+#     c.execute('INSERT INTO USER (Id, Name, Hash) VALUES (?, ?, ?)', 
+#     ( 
+#     id, 
+#     random.choice(Names), 
+#     str(hash(random.randint(1, 1000000))) 
+#     ) 
+#     ) 
+# вместо закоментированного выше, очень коротко:
+for i in range(10):
+    c.execute('INSERT INTO USER (Name, Hash) VALUES (?, ?)', 
     ( 
-    id, 
     random.choice(Names), 
     str(hash(random.randint(1, 1000000))) 
     ) 
     ) 
+
 
 # сохраним занятые ssid в множество
 SSIDs=set()
@@ -85,6 +94,8 @@ for i in range(10):
     ) VALUES (?, ?, ?, ?)''', 
     ( 
         fake.date_time_between(start_date=start_date1, end_date=end_date1), 
+        #fake работает медленно, быстрее будет так: 
+        # start_date1 + (start_date1-end_date1)*random.random()
         random.choice(Prog_names), 
         cur_SSID,
         random.randint(1,100000)
